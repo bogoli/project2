@@ -15,8 +15,8 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     private JMenuBar menuBar;
     private JMenu newGame, options, about;
     private JMenuItem four, five, six, reset, rules, quit, towers, dev;
-    private JLabel introLabel;
-    private JPanel introP, menuP;
+    private JLabel introLabel, testLabel;
+    private JPanel introP, menuP, testP;
 
     private final Dimension dimension = new Dimension(800,600);
     private static final String TITLE = "Towers of Hanoi";
@@ -87,16 +87,16 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         menuP.add(menuBar, BorderLayout.NORTH);
 
         introLabel = new JLabel("Welcome to Tower of Hanoi!");
-        introLabel.setForeground(Color.black);
-        introLabel.setSize(50,50);
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         introP = new JPanel(new BorderLayout());
         introP.add(introLabel, BorderLayout.CENTER);
-        introP.setBackground(Color.white);
-        introP.setOpaque(true);
 
+        testLabel = new JLabel("Testing");
+        testLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        testP = new JPanel(new BorderLayout());
+        testP.add(testLabel, BorderLayout.CENTER);
 
         // Add everything to contentPane
         mainPane.add(menuP, BorderLayout.NORTH);
@@ -107,7 +107,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         this.setVisible(true);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setResizable(false);
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -128,6 +127,11 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
         else if(e.getSource().equals(reset)){
             System.out.println("reset");
+            mainPane.removeAll();
+            mainPane.add(menuP, BorderLayout.NORTH);
+            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.setVisible(true);
+            mainPane.revalidate();
         }
 
         else if(e.getSource().equals(rules)){
