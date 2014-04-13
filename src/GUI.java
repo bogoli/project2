@@ -22,13 +22,16 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
     private static final String TITLE = "Towers of Hanoi";
     Container mainPane = this.getContentPane();
 
-    Font f = new Font("Helvetica", Font.PLAIN, 12);
+    Font menuFont = new Font("Helvetica", Font.PLAIN, 14);
+    Font mainFont = new Font("Helvetica", Font.PLAIN, 24);
 
     public GUI(){
         // set UI component fonts and colors
-        UIManager.put("MenuBar.font", f);
-        UIManager.put("Menu.font", f);
-        UIManager.put("MenuItem.font", f);
+        UIManager.put("MenuBar.font", menuFont);
+        UIManager.put("Menu.font", menuFont);
+        UIManager.put("MenuItem.font", menuFont);
+        UIManager.put("Label.font", mainFont);
+        UIManager.put("OptionPane.font", menuFont);
 
         mainPane.setLayout(new BorderLayout());
 
@@ -79,8 +82,12 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         about.add(towers);
         about.add(dev);
 
+        // add the menu bar to the menu panel
+        menuP = new JPanel(new BorderLayout());
+        menuP.add(menuBar, BorderLayout.NORTH);
+
         introLabel = new JLabel("Welcome to Tower of Hanoi!");
-        introLabel.setForeground(Color.red);
+        introLabel.setForeground(Color.black);
         introLabel.setSize(50,50);
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -90,8 +97,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         introP.setOpaque(true);
 
 
-        menuP = new JPanel(new BorderLayout());
-        menuP.add(menuBar, BorderLayout.NORTH);
 
         // Add everything to contentPane
         mainPane.add(menuP, BorderLayout.NORTH);
