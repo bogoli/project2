@@ -14,7 +14,7 @@ import java.awt.event.KeyListener;
 public class GUI extends JFrame implements ActionListener, KeyListener{
     private JMenuBar menuBar;
     private JMenu newGame, options, about;
-    private JMenuItem four, five, six, reset, rules, quit, towers, dev;
+    private JMenuItem four, five, six, rules, quit, towers, dev;
     private JLabel introLabel, testLabel;
     private JPanel introP, menuP, testP;
 
@@ -48,19 +48,16 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         menuBar.add(options);
         menuBar.add(about);
 
-        reset = new JMenuItem("Reset Game");
-        reset.addActionListener(this);
-
-        rules = new JMenuItem("View Game Rules");
+        rules = new JMenuItem("View rules");
         rules.addActionListener(this);
 
-        quit = new JMenuItem("Quit Game");
+        quit = new JMenuItem("Quit");
         quit.addActionListener(this);
 
-        towers = new JMenuItem("About Towers of Hanoi");
+        towers = new JMenuItem("Towers of Hanoi");
         towers.addActionListener(this);
 
-        dev = new JMenuItem("About Development");
+        dev = new JMenuItem("Developer");
         dev.addActionListener(this);
 
         four = new JMenuItem("Easy");
@@ -76,7 +73,6 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         newGame.add(four);
         newGame.add(five);
         newGame.add(six);
-        options.add(reset);
         options.add(rules);
         options.add(quit);
         about.add(towers);
@@ -113,26 +109,43 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
 
         // new game ==================================================================
         if(e.getSource().equals(four)){
-            System.out.println("Easy - four");
+            Game game = new Game(4);
+
+            mainPane.removeAll();
+            mainPane.add(menuP, BorderLayout.NORTH);
+            testLabel.setText("GAME WITH 4 DISKS");
+            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.setVisible(true);
+            mainPane.revalidate();
+            mainPane.repaint();
+
         }
         else if(e.getSource().equals(five)){
-            System.out.println("med - five");
+            Game game = new Game(5);
+
+            mainPane.removeAll();
+            mainPane.add(menuP, BorderLayout.NORTH);
+            testLabel.setText("GAME WITH 5 DISKS");
+            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.setVisible(true);
+            mainPane.revalidate();
+            mainPane.repaint();
+
         }
         else if(e.getSource().equals(six)){
-            System.out.println("hard - six");
+            Game game = new Game(6);
+
+            mainPane.removeAll();
+            mainPane.add(menuP, BorderLayout.NORTH);
+            testLabel.setText("GAME WITH 6 DISKS");
+            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.setVisible(true);
+            mainPane.revalidate();
+            mainPane.repaint();
 
         }
 
         // options ===================================================================
-
-        else if(e.getSource().equals(reset)){
-            System.out.println("reset");
-            mainPane.removeAll();
-            mainPane.add(menuP, BorderLayout.NORTH);
-            mainPane.add(testP, BorderLayout.CENTER);
-            mainPane.setVisible(true);
-            mainPane.revalidate();
-        }
 
         else if(e.getSource().equals(rules)){
             String ruleText =  "The objective of the puzzle is to move the entire stack to another rod.\n\n" +
@@ -171,6 +184,7 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
             JOptionPane.showMessageDialog(null, towersText, "About Towers of Hanoi", JOptionPane.PLAIN_MESSAGE);
         }
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
