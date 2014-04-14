@@ -1,9 +1,12 @@
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 /**
  * Created by Lia Bogoev using IntelliJ
  * 4/13/14
  * CS 2410
  */
-public class Game {
+public class Game implements KeyListener{
 
     // Rod subclass
     public class Rod {
@@ -53,5 +56,21 @@ public class Game {
             origin.diskArray[origin.top] = 0;   // set the top spot of origin to 0
             origin.top--;           // move the top tracker to the next full spot
         }
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }

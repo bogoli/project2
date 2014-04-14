@@ -11,7 +11,7 @@ import java.awt.event.KeyListener;
  * CS 2410
  */
 
-public class GUI extends JFrame implements ActionListener, KeyListener{
+public class GUI extends JFrame implements ActionListener{
     private JMenuBar menuBar;
     private JMenu newGame, options, about;
     private JMenuItem four, five, six, rules, quit, towers, dev;
@@ -185,19 +185,4 @@ public class GUI extends JFrame implements ActionListener, KeyListener{
         }
     }
 
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 }
