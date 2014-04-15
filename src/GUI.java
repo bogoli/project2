@@ -17,6 +17,7 @@ public class GUI extends JFrame implements ActionListener{
     private JMenuItem four, five, six, rules, quit, towers, dev;
     private JLabel introLabel, testLabel;
     private JPanel introP, menuP, testP;
+    private JButton start;
 
     private final Dimension dimension = new Dimension(800,600);
     private static final String TITLE = "Towers of Hanoi";
@@ -39,7 +40,7 @@ public class GUI extends JFrame implements ActionListener{
         menuBar = new JMenuBar();
         menuBar.setSize(800, 30);
 
-        newGame = new JMenu("Start");
+        newGame = new JMenu("Difficulty");
         options = new JMenu("Options");
         about = new JMenu("About");
 
@@ -82,17 +83,20 @@ public class GUI extends JFrame implements ActionListener{
         menuP = new JPanel(new BorderLayout());
         menuP.add(menuBar, BorderLayout.NORTH);
 
-        introLabel = new JLabel("Welcome to Tower of Hanoi!");
+        introLabel = new JLabel("Tower of Hanoi");
+        introLabel.setSize(500,200);
+        introLabel.setLocation(150,100);
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        introP = new JPanel(new BorderLayout());
-        introP.add(introLabel, BorderLayout.CENTER);
+        start = new JButton("START");
+        start.addActionListener(this);
+        start.setSize(200,50);
+        start.setLocation(300,250);
+        start.setHorizontalAlignment(SwingConstants.CENTER);
 
-        testLabel = new JLabel("Testing");
-        testLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-        testP = new JPanel(new BorderLayout());
-        testP.add(testLabel, BorderLayout.CENTER);
+        introP = new JPanel(null);
+        introP.add(introLabel);
+        introP.add(start);
 
         // Add everything to contentPane
         mainPane.add(menuP, BorderLayout.NORTH);
@@ -113,20 +117,20 @@ public class GUI extends JFrame implements ActionListener{
 
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
-            testLabel.setText("GAME WITH 4 DISKS");
-            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.add(game);
+            game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
 
         }
-        else if(e.getSource().equals(five)){
+        else if(e.getSource().equals(five) | e.getSource().equals(start)){
             Game game = new Game(5);
 
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
-            testLabel.setText("GAME WITH 5 DISKS");
-            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.add(game);
+            game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
@@ -139,7 +143,6 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
             game.requestFocus();
-            // set focus
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();

@@ -12,11 +12,12 @@ import java.awt.event.KeyListener;
  */
 public class Game extends JPanel implements ActionListener, KeyListener{
 
-    private JLabel Rod1Label, Rod2Label, Rod3Label, status;
+    private JLabel rod1Label, rod2Label, rod3Label, status;
     private Color myGrey = new Color(216, 216, 216);
     public int numberOfDisks;
     public Rod rod1, rod2, rod3;
 
+    private final Dimension labelDim = new Dimension(200,30);
     // ========================================================================== ROD SUBCLASS
     public class Rod {
         public int diskArray[];
@@ -47,24 +48,30 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
 
         // ------------------------------------------------ gamePane - adding components
-        this.setLayout(new BorderLayout());
+        this.setLayout(null);
         this.setBackground(myGrey);
         this.setOpaque(true);
 
-        Rod1Label = new JLabel("—1—");
-        Rod1Label.setSize(100,100);
+        rod1Label = new JLabel("—1—");
+        rod1Label.setHorizontalAlignment(SwingConstants.CENTER);
+        rod1Label.setSize(labelDim);
 
-        Rod2Label = new JLabel("—2—");
-        Rod2Label.setSize(100,100);
+        rod2Label = new JLabel("—2—");
+        rod2Label.setHorizontalAlignment(SwingConstants.CENTER);
+        rod2Label.setSize(labelDim);
 
-        Rod3Label = new JLabel("—3—");
-        Rod3Label.setSize(100,100);
+        rod3Label = new JLabel("—3—");
+        rod3Label.setHorizontalAlignment(SwingConstants.CENTER);
+        rod3Label.setSize(labelDim);
 
         status = new JLabel("");
 
-        this.add(Rod1Label,BorderLayout.SOUTH);
-        this.add(Rod2Label,BorderLayout.SOUTH);
-        this.add(Rod3Label,BorderLayout.SOUTH);
+        this.add(rod1Label);
+        rod1Label.setLocation(100,400);
+        this.add(rod2Label);
+        rod2Label.setLocation(300,400);
+        this.add(rod3Label);
+        rod3Label.setLocation(500,400);
 
         this.setFocusable(true);
         this.setVisible(true);
