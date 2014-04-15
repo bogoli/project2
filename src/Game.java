@@ -13,7 +13,10 @@ import java.awt.event.KeyListener;
 public class Game extends JPanel implements ActionListener, KeyListener{
 
     private JLabel rod1Label, rod2Label, rod3Label, status;
-    private Color myGrey = new Color(216, 216, 216);
+    private Color easyColor = new Color(251,184,41);
+    private Color medColor = new Color(255,153,0);
+    private Color hardColor = new Color(255, 102, 0);
+
     public int numberOfDisks;
     public Rod rod1, rod2, rod3;
 
@@ -49,7 +52,20 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         // ------------------------------------------------ gamePane - adding components
         this.setLayout(null);
-        this.setBackground(myGrey);
+        switch(numberOfDisks){
+            case 4:
+                this.setBackground(easyColor);
+                break;
+            case 5:
+                this.setBackground(medColor);
+                break;
+            case 6:
+                this.setBackground(hardColor);
+                break;
+            default:
+                this.setBackground(medColor);
+                break;
+        }
         this.setOpaque(true);
 
         rod1Label = new JLabel("—1—");

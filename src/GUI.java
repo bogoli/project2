@@ -18,21 +18,38 @@ public class GUI extends JFrame implements ActionListener{
     private JLabel introLabel, testLabel;
     private JPanel introP, menuP, testP;
     private JButton start;
+    private Color startColor = new Color(161,200,32);
+    private Color introColor = new Color(248,142,19);
+    private Color dialogColor = new Color(228,86,53);
+
 
     private final Dimension dimension = new Dimension(800,600);
     private static final String TITLE = "Towers of Hanoi";
     Container mainPane = this.getContentPane();
 
-    Font menuFont = new Font("Helvetica", Font.PLAIN, 14);
-    Font mainFont = new Font("Helvetica", Font.PLAIN, 24);
+    Font menuFont = new Font("American Typewriter", Font.PLAIN, 14);
+    Font mainFont = new Font("American Typewriter", Font.PLAIN, 24);
 
     public GUI(){
-        // set UI component fonts and colors
+        // set UI component fonts
         UIManager.put("MenuBar.font", menuFont);
         UIManager.put("Menu.font", menuFont);
         UIManager.put("MenuItem.font", menuFont);
         UIManager.put("Label.font", mainFont);
-        UIManager.put("OptionPane.font", menuFont);
+        UIManager.put("OptionPane.messageFont", menuFont);
+        UIManager.put("Button.font", menuFont);
+
+        // borders
+        UIManager.put("MenuBar.border", BorderFactory.createLineBorder(Color.black, 1));
+        UIManager.put("Button.border", BorderFactory.createLineBorder(Color.black, 1));
+
+        // colors
+        UIManager.put("PopupMenu.background", introColor);
+        UIManager.put("MenuItem.background", introColor);
+        UIManager.put("OptionPane.background", dialogColor);
+        UIManager.put("Panel.background", dialogColor);
+
+
 
         mainPane.setLayout(new BorderLayout());
 
@@ -89,12 +106,16 @@ public class GUI extends JFrame implements ActionListener{
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         start = new JButton("START");
+        start.setBackground(startColor);
+        start.setOpaque(true);
         start.addActionListener(this);
         start.setSize(200,50);
-        start.setLocation(300,250);
+        start.setLocation(300, 250);
         start.setHorizontalAlignment(SwingConstants.CENTER);
 
         introP = new JPanel(null);
+        introP.setBackground(introColor);
+        introP.setOpaque(true);
         introP.add(introLabel);
         introP.add(start);
 
