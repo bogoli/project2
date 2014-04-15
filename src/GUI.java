@@ -137,8 +137,9 @@ public class GUI extends JFrame implements ActionListener{
 
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
-            testLabel.setText("GAME WITH 6 DISKS");
-            mainPane.add(testP, BorderLayout.CENTER);
+            mainPane.add(game);
+            game.requestFocus();
+            // set focus
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
