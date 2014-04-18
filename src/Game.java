@@ -18,12 +18,12 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     private Color medColor = new Color(255,153,0);
     private Color hardColor = new Color(255, 102, 0);
 
-    public int storedRodID;
+    // public int storedRodID;
     public int numberOfDisks;
-    public Rod rod1, rod2, rod3;
+    // public Rod rod1, rod2, rod3;
 
     private final Dimension labelDim = new Dimension(200,30);
-    // ========================================================================== ROD SUBCLASS
+    /* ========================================================================== ROD SUBCLASS
     public class Rod {
         public int diskArray[];
         public int top;
@@ -34,12 +34,14 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             this.top = 0;
         }
     }
+    */
     //========================================================================== GAME CONSTRUCTOR
 
     public Game(int numberOfDisks){
         addKeyListener(this);
         this.numberOfDisks = numberOfDisks;
 
+        /*
         rod1 = new Rod(numberOfDisks);
         rod2 = new Rod(numberOfDisks);
         rod3 = new Rod(numberOfDisks);
@@ -51,7 +53,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             rod2.diskArray[i] = 10;
             rod3.diskArray[i] = 10;
         }
-
+        */
         // ------------------------------------------------ gamePane - adding components
         this.setLayout(null);
         switch(numberOfDisks){
@@ -93,15 +95,17 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         rod1Button = new JButton(" ");
         rod1Button.addActionListener(this);
         rod1Button.setSize(labelDim);
+        rod1Button.setLocation(100,450);
 
         rod2Button = new JButton(" ");
         rod2Button.addActionListener(this);
         rod2Button.setSize(labelDim);
+        rod2Button.setLocation(300,450);
 
         rod3Button = new JButton(" ");
         rod3Button.addActionListener(this);
         rod3Button.setSize(labelDim);
-
+        rod3Button.setLocation(500,450);
 
         this.add(rod1Label);
         this.add(rod2Label);
@@ -111,14 +115,14 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         this.add(rod3Button);
         this.add(status);
 
-        storedRodID = 0;
+        // storedRodID = 0;
 
         this.setSize(800,600);
         this.setFocusable(true);
         this.setVisible(true);
     }
 
-    // ===================================================================== OTHER MEMBER FUNCTIONS
+    /* ===================================================================== OTHER MEMBER FUNCTIONS
     public void print(){
         for(int i = (numberOfDisks - 1); i >= 0; i -= 1){
             System.out.println(rod1.diskArray[i] + " " + rod2.diskArray[i] + " " + rod3.diskArray[i]);
@@ -136,7 +140,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             origin.top--;           // move the top tracker to the next full spot
         }
     }
-
+    */
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -151,7 +155,14 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
 
+    }
 
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+}
+/*
         switch(storedRodID){
             case 0:
                 status.setText("Case: 0");
@@ -228,12 +239,4 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             default:
                 break;
         }
-
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-}
+    */
