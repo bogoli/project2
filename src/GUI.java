@@ -18,9 +18,9 @@ public class GUI extends JFrame implements ActionListener{
     private JLabel introLabel, testLabel;
     private JPanel introP, menuP, testP;
     private JButton start;
-    private Color startColor = new Color(200, 60, 56);
-    private Color introColor = new Color(248,142,19);
-    private Color dialogColor = new Color(228,86,53);
+    private Color startColor = new Color(46,224,174);
+    private Color introColor = new Color(255,245,96);
+    private Color dialogColor = new Color(161,220,64);
 
 
     private final Dimension dimension = new Dimension(800,600);
@@ -44,8 +44,8 @@ public class GUI extends JFrame implements ActionListener{
         UIManager.put("Button.border", BorderFactory.createLineBorder(Color.black, 1));
 
         // colors
-        UIManager.put("PopupMenu.background", introColor);
-        UIManager.put("MenuItem.background", introColor);
+        UIManager.put("PopupMenu.background", startColor);
+        UIManager.put("MenuItem.background", startColor);
         UIManager.put("OptionPane.background", dialogColor);
         UIManager.put("Panel.background", dialogColor);
 
@@ -139,7 +139,10 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
-            game.addRect();
+            game.addRect(4);
+            game.addRect(3);
+            game.addRect(2);
+            game.addRect(1);
             game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();
@@ -152,6 +155,11 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+            game.addRect(5);
+            game.addRect(4);
+            game.addRect(3);
+            game.addRect(2);
+            game.addRect(1);
             game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();
@@ -164,6 +172,12 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+            game.addRect(6);
+            game.addRect(5);
+            game.addRect(4);
+            game.addRect(3);
+            game.addRect(2);
+            game.addRect(1);
             game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();
