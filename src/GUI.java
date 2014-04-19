@@ -139,6 +139,7 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+            game.addRect();
             game.requestFocus();
             mainPane.setVisible(true);
             mainPane.revalidate();

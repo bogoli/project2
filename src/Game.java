@@ -28,26 +28,62 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     //========================================================================== DISK SUBCLASS
 
     public class Disk {
-        public Color recColor = new Color(0, 0, 0);
         public int size;
-
-        public Graphics rectangle;
-        public int width, xpos, ypos;
-        public int height;
 
         public Disk(int size){
             this.size = size;
-            this.width = 10*size;
-            this.height = 30;
-            this.xpos = 100;
-            this.ypos = 30*size + 100;
+        }
+    }
+
+    public class DiskRect{
+        public int xPos, yPos, width;
+        public Color color;
+
+        public DiskRect() {
+            xPos = 0;
+            yPos = 0;
+            width = 20;
+            color = Color.BLACK;
         }
 
-        public void setPos(int x, int y){
-            this.xpos = x;
-            this.ypos = y;
+        // copy constructor
+        public DiskRect(DiskRect orig){
+            xPos = orig.xPos;
+            yPos = orig.yPos;
+            width = orig.width;
+            color = orig.color;
         }
 
+        public void draw(Graphics g) {
+            g.setColor(color);
+            g.fillRect(xPos, yPos, width, 30);
+        }
+
+    }
+
+
+
+    private DiskRect testRect = null;
+
+    public void addRect() {
+        testRect = new DiskRect();
+        testRect.xPos = 100;
+        testRect.yPos = 400;
+    }
+
+    public void paint(Graphics g) {
+        //super.paint(g);
+
+        // use double buffering
+        Image bufferedImage = createImage(getWidth(), getHeight());
+        Graphics2D buffer = (Graphics2D) bufferedImage.getGraphics();
+
+        super.paint(buffer);
+
+        if (testRect != null)
+            testRect.draw(buffer);
+
+        g.drawImage(bufferedImage, 0, 0, this);
     }
 
 
@@ -71,7 +107,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         for(int i=0; i < 5; ++i){
             towers[0].push(new Disk((5-i)));
-            // towers[0].peek().draw(towers[0].peek().rectangle);
             towers[1].push(new Disk(6));
             towers[2].push(new Disk(6));
         }
