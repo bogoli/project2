@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 import java.util.List;
 
@@ -17,25 +17,26 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     private JLabel rod1Label, rod2Label, rod3Label, status;
     private JButton rod1Button, rod2Button, rod3Button;
-    private Color easyColor = new Color(240,240,240);
-    private Color medColor = new Color(204,204,204);
-    private Color hardColor = new Color(192,192,192);
+    private Color easyColor = new Color(120,120,120);
+    private Color medColor = new Color(100,100,100);
+    private Color hardColor = new Color(75,75,75);
 
-    private Color diskColor1 = new Color(160,220,0);
-    private Color diskColor2  = new Color(175,220,0);
-    private Color diskColor3  = new Color(190,220,0);
-    private Color diskColor4  = new Color(205,220,0);
-    private Color diskColor5  = new Color(220,220,0);
-    private Color diskColor6  = new Color(235,220,0);
+    private Color diskColor6  = new Color(100,200,50);
+    private Color diskColor5  = new Color(130,200,50);
+    private Color diskColor4  = new Color(160,200,50);
+    private Color diskColor3  = new Color(190,200,50);
+    private Color diskColor2  = new Color(220,200,50);
+    private Color diskColor1  = new Color(250,200,50);
 
     public int numberOfDisks;
     public Stack<Disk>[] towers = new Stack[3];
     public int storedTowerID;
 
-    public List<DiskRect> diskRectList;
+    public List<DiskRect>[] diskRectList = new List[3];
 
     private final Dimension labelDim = new Dimension(200,30);
     private final Dimension buttonDim = new Dimension(180,40);
+
     //============================================================================== Disk SUBCLASS
 
     public class Disk {
@@ -53,7 +54,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         public Color color;
 
         public DiskRect(int size) {
-            xPos = 125 + (15 * (5-size));
+            xPos = 125  + (15 * (5-size));
             yPos = 200 + (30 * (size));
             width = 30 * size;
             switch(size){
@@ -88,13 +89,10 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     }
     //=============================================================================== GRAPHICS METHODS
 
-    private DiskRect testRect = null;
-
 
     public void addRect(int size) {
-
         DiskRect diskRect= new DiskRect(size);
-        diskRectList.add(diskRect);
+        diskRectList[0].add(diskRect);
     }
 
 
@@ -107,8 +105,15 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         super.paint(buffer);
 
-        for (DiskRect b : diskRectList)
+        for (DiskRect b : diskRectList[0]){
             b.draw(buffer);
+        }
+        for (DiskRect b : diskRectList[1]){
+            b.draw(buffer);
+        }
+        for (DiskRect b : diskRectList[2]){
+            b.draw(buffer);
+        }
 
         g.drawImage(bufferedImage, 0, 0, this);
     }
@@ -119,8 +124,16 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     public void moveDisk(int orig, int dest){
         if(towers[orig].peek().size !=0 && (towers[orig].peek().size < towers[dest].peek().size)){
             towers[dest].push(towers[orig].pop());
+
             System.out.println("Moved from " + orig + " to " + dest);
         }
+    }
+
+    public void moveDiskRect(int orig, int dest){
+        DiskRect diskRect;
+        diskRect = diskRectList[orig].get(towers[orig].peek().size);
+        diskRect.xPos += 125 * (dest - orig);
+        diskRectList[dest].add(diskRect);
     }
 
     //========================================================================== GAME CONSTRUCTOR
@@ -140,8 +153,9 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             towers[2].push(new Disk(6));
         }
 
-        diskRectList = new ArrayList<DiskRect>();
-
+        for (int i=0; i<3; ++i){
+            diskRectList[i] = new LinkedList<DiskRect>();
+        }
 
         // -------------------------------------------- gamePane - adding components
         this.setLayout(null);
@@ -161,28 +175,10 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
         this.setOpaque(true);
 
-    /*
-        rod1Label = new JLabel("——————");
-        rod1Label.setHorizontalAlignment(SwingConstants.CENTER);
-        rod1Label.setSize(labelDim);
-        rod1Label.setLocation(100,400);
-
-        rod2Label = new JLabel("——————");
-        rod2Label.setHorizontalAlignment(SwingConstants.CENTER);
-        rod2Label.setSize(labelDim);
-        rod2Label.setLocation(300,400);
-
-        rod3Label = new JLabel("——————");
-        rod3Label.setHorizontalAlignment(SwingConstants.CENTER);
-        rod3Label.setSize(labelDim);
-        rod3Label.setLocation(500,400);
-    */
-
         status = new JLabel("");
         status.setHorizontalAlignment(SwingConstants.CENTER);
         status.setSize(labelDim);
         status.setLocation(300,500);
-
 
         rod1Button = new JButton("1");
         rod1Button.addActionListener(this);
@@ -199,11 +195,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         rod3Button.setSize(buttonDim);
         rod3Button.setLocation(510,450);
 
-        /*
-        this.add(rod1Label);
-        this.add(rod2Label);
-        this.add(rod3Label);
-        */
         this.add(rod1Button);
         this.add(rod2Button);
         this.add(rod3Button);
@@ -250,6 +241,8 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         break;
                     case '2':
                         moveDisk(0, 1);
+                        moveDiskRect(0, 1);
+                        repaint();
                         storedTowerID = -1;
                         break;
                     case '3':
