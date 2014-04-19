@@ -18,7 +18,7 @@ public class GUI extends JFrame implements ActionListener{
     private JLabel introLabel, testLabel;
     private JPanel introP, menuP, testP;
     private JButton start;
-    private Color startColor = new Color(161,200,32);
+    private Color startColor = new Color(200, 60, 56);
     private Color introColor = new Color(248,142,19);
     private Color dialogColor = new Color(228,86,53);
 

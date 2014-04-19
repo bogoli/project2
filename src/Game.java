@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Stack;
 
 /**
  * Created by Lia Bogoev using IntelliJ
@@ -18,42 +19,65 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     private Color medColor = new Color(255,153,0);
     private Color hardColor = new Color(255, 102, 0);
 
-    // public int storedRodID;
     public int numberOfDisks;
-    // public Rod rod1, rod2, rod3;
+    public Stack<Disk>[] towers = new Stack[3];
+    public int storedTowerID;
 
     private final Dimension labelDim = new Dimension(200,30);
-    /* ========================================================================== ROD SUBCLASS
-    public class Rod {
-        public int diskArray[];
-        public int top;
+    private final Dimension buttonDim = new Dimension(180,30);
+    //========================================================================== DISK SUBCLASS
 
-        // constructor
-        public Rod(int disksHeld){
-            this.diskArray = new int[disksHeld];
-            this.top = 0;
+    public class Disk {
+        public Color recColor = new Color(0, 0, 0);
+        public int size;
+
+        public Graphics rectangle;
+        public int width, xpos, ypos;
+        public int height;
+
+        public Disk(int size){
+            this.size = size;
+            this.width = 10*size;
+            this.height = 30;
+            this.xpos = 100;
+            this.ypos = 30*size + 100;
+        }
+
+        public void setPos(int x, int y){
+            this.xpos = x;
+            this.ypos = y;
+        }
+
+    }
+
+
+    //========================================================================== GAME CONSTRUCTOR
+
+    public void moveDisk(int orig, int dest){
+        if(towers[orig].peek().size !=0 && (towers[orig].peek().size < towers[dest].peek().size)){
+            towers[dest].push(towers[orig].pop());
+            System.out.println("Moved from " + orig + " to " + dest);
         }
     }
-    */
-    //========================================================================== GAME CONSTRUCTOR
 
     public Game(int numberOfDisks){
         addKeyListener(this);
         this.numberOfDisks = numberOfDisks;
+        this.storedTowerID = -1;
 
-        /*
-        rod1 = new Rod(numberOfDisks);
-        rod2 = new Rod(numberOfDisks);
-        rod3 = new Rod(numberOfDisks);
-
-        for(int i = 0; i < numberOfDisks; ++i){
-            // initialize the game
-            rod1.diskArray[i] = (numberOfDisks - i);
-            rod1.top = numberOfDisks - 1;
-            rod2.diskArray[i] = 10;
-            rod3.diskArray[i] = 10;
+        for (int i=0; i<3; ++i){
+            towers[i] = new Stack<Disk>();
         }
-        */
+
+        for(int i=0; i < 5; ++i){
+            towers[0].push(new Disk((5-i)));
+            // towers[0].peek().draw(towers[0].peek().rectangle);
+            towers[1].push(new Disk(6));
+            towers[2].push(new Disk(6));
+        }
+
+        repaint();
+
         // ------------------------------------------------ gamePane - adding components
         this.setLayout(null);
         switch(numberOfDisks){
@@ -72,17 +96,17 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
         this.setOpaque(true);
 
-        rod1Label = new JLabel("—1—");
+        rod1Label = new JLabel("——————");
         rod1Label.setHorizontalAlignment(SwingConstants.CENTER);
         rod1Label.setSize(labelDim);
         rod1Label.setLocation(100,400);
 
-        rod2Label = new JLabel("—2—");
+        rod2Label = new JLabel("——————");
         rod2Label.setHorizontalAlignment(SwingConstants.CENTER);
         rod2Label.setSize(labelDim);
         rod2Label.setLocation(300,400);
 
-        rod3Label = new JLabel("—3—");
+        rod3Label = new JLabel("——————");
         rod3Label.setHorizontalAlignment(SwingConstants.CENTER);
         rod3Label.setSize(labelDim);
         rod3Label.setLocation(500,400);
@@ -92,20 +116,20 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         status.setSize(labelDim);
         status.setLocation(300,500);
 
-        rod1Button = new JButton(" ");
+        rod1Button = new JButton("1");
         rod1Button.addActionListener(this);
-        rod1Button.setSize(labelDim);
-        rod1Button.setLocation(100,450);
+        rod1Button.setSize(buttonDim);
+        rod1Button.setLocation(110,450);
 
-        rod2Button = new JButton(" ");
+        rod2Button = new JButton("2");
         rod2Button.addActionListener(this);
-        rod2Button.setSize(labelDim);
-        rod2Button.setLocation(300,450);
+        rod2Button.setSize(buttonDim);
+        rod2Button.setLocation(310,450);
 
-        rod3Button = new JButton(" ");
+        rod3Button = new JButton("3");
         rod3Button.addActionListener(this);
-        rod3Button.setSize(labelDim);
-        rod3Button.setLocation(500,450);
+        rod3Button.setSize(buttonDim);
+        rod3Button.setLocation(510,450);
 
         this.add(rod1Label);
         this.add(rod2Label);
@@ -115,32 +139,12 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         this.add(rod3Button);
         this.add(status);
 
-        // storedRodID = 0;
-
         this.setSize(800,600);
         this.setFocusable(true);
         this.setVisible(true);
     }
 
-    /* ===================================================================== OTHER MEMBER FUNCTIONS
-    public void print(){
-        for(int i = (numberOfDisks - 1); i >= 0; i -= 1){
-            System.out.println(rod1.diskArray[i] + " " + rod2.diskArray[i] + " " + rod3.diskArray[i]);
-        }
-    }
 
-    public void move(Rod origin, Rod destination){
-        if(origin.diskArray[origin.top] > destination.diskArray[destination.top]){
-            status.setText("Invalid move.");
-        }
-        else{
-            destination.top++;  // move to the next blank spot in the array
-            destination.diskArray[destination.top] = origin.diskArray[origin.top]; // set it equal to the disk in the top spot of origin
-            origin.diskArray[origin.top] = 0;   // set the top spot of origin to 0
-            origin.top--;           // move the top tracker to the next full spot
-        }
-    }
-    */
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -149,6 +153,70 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
+        switch(storedTowerID){
+            case -1:
+                // no tower selected
+                switch(e.getKeyChar()){
+                    case '1':
+                        storedTowerID = 0;
+                        break;
+                    case '2':
+                        storedTowerID = 1;
+                        break;
+                    case '3':
+                        storedTowerID = 2;
+                        break;
+                }
+                break;
+            case 0:
+                switch(e.getKeyChar()){
+                    case '1':
+                        status.setText("1 - 1");
+                        storedTowerID = -1;
+                        break;
+                    case '2':
+                        moveDisk(0, 1);
+                        storedTowerID = -1;
+                        break;
+                    case '3':
+                        moveDisk(0,2);
+                        storedTowerID = -1;
+                        break;
+                }
+                break;
+            case 1:
+                switch(e.getKeyChar()){
+                    case '1':
+                        moveDisk(1,0);
+                        storedTowerID = -1;
+                        break;
+                    case '2':
+                        status.setText("2-2 invalid");
+                        storedTowerID = -1;
+                        break;
+                    case '3':
+                        moveDisk(1,2);
+                        storedTowerID = -1;
+                        break;
+                }
+                break;
+            case 2:
+                switch(e.getKeyChar()){
+                    case '1':
+                        moveDisk(2,0);
+                        storedTowerID = -1;
+                        break;
+                    case '2':
+                        moveDisk(2,1);
+                        storedTowerID = -1;
+                        break;
+                    case '3':
+                        status.setText("3-3 invalid");
+                        storedTowerID = -1;
+                        break;
+                }
+                break;
+        }
 
     }
 
@@ -162,81 +230,3 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     }
 }
-/*
-        switch(storedRodID){
-            case 0:
-                status.setText("Case: 0");
-                // set the storedRodID, there's no chosen rod
-                System.out.println(e.getKeyChar());
-                switch(e.getKeyChar()){
-                    case '1':
-                        storedRodID = 1;
-                        break;
-                    case '2':
-                        storedRodID = 2;
-                        break;
-                    case '3':
-                        storedRodID = 3;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            case 1:
-                status.setText("Case: 1");
-                switch(e.getKeyChar()){
-                    case '1':
-                        status.setText("1 -> 1 : invalid");
-                        break;
-                    case '2':
-                        move(rod1, rod2);
-                        storedRodID = 0;
-                        break;
-                    case '3':
-                        move(rod1, rod3);
-                        storedRodID = 0;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case 2:
-                switch(e.getKeyChar()){
-                    case '1':
-                        move(rod2, rod1);
-                        storedRodID = 0;
-                        break;
-                    case '2':
-                        status.setText("2 -> 2 : invalid");
-                        break;
-                    case '3':
-                        move(rod2, rod3);
-                        storedRodID = 0;
-                        break;
-                    default:
-                        break;
-                }
-                break;
-
-            case 3:
-                switch(e.getKeyChar()){
-                    case '1':
-                        move(rod3, rod1);
-                        storedRodID = 0;
-                        break;
-                    case '2':
-                        move(rod3, rod2);
-                        storedRodID = 0;
-                        break;
-                    case '3':
-                        status.setText("3 -> 3 : invalid");
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            default:
-                break;
-        }
-    */
