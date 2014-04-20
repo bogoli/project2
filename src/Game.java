@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 
 /**
@@ -15,12 +14,10 @@ import java.util.NoSuchElementException;
  */
 public class Game extends JPanel implements ActionListener, KeyListener{
 
-    private JLabel status;
     private static JButton tower1B, tower2B, tower3B;
-    private Color easyColor = new Color(120,120,120);
-    private Color medColor = new Color(100,100,100);
-    private Color hardColor = new Color(75,75,75);
+    private JLabel status;
 
+    // colors corresponding to disks
     private Color diskColor6  = new Color(100,200,50);
     private Color diskColor5  = new Color(130,200,50);
     private Color diskColor4  = new Color(160,200,50);
@@ -29,36 +26,38 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     private Color diskColor1  = new Color(250,200,50);
     private Color selected = new Color(250, 50, 70);
 
-    public int numberOfDisks;
-    public int storedTowerID;
+    public int numberOfDisks;   // determines the difficulty of the game (4,5,6 are the only options)
+    public int storedTowerID;   // determines whether it's the first move (-1) or which tower the disk comes from (0,1,2)
 
-    public LinkedList<DiskRect>[] diskRectList = new LinkedList[3];
-    public LinkedList<Disk>[] towers = new LinkedList[3];
-
-    private final Dimension labelDim = new Dimension(200,30);
-    private final Dimension buttonDim = new Dimension(180,40);
+    public LinkedList<DiskRect>[] diskRectList = new LinkedList[3];     // Linked list holding the graphics objects
+    public LinkedList<Disk>[] towers = new LinkedList[3];               // Linked list holding simple Disk objects (which just have a size)
 
     //============================================================================== Disk SUBCLASS
-
+    // Simple class representing the disks (logically)
     public class Disk {
         public int size;
 
+        // Constructor
         public Disk(int size){
             this.size = size;
         }
     }
-
     //========================================================================== DiskRect SUBCLASS
-
+    // class of graphics objects representing the disks (visually)
     public class DiskRect{
         public int xPos, yPos, width, size;
         public Color color;
 
+        // Constructor
         public DiskRect(int size) {
             this.size = size;
+
+            // positions each disk centered on top the the previous one
             xPos = 125  + (15 * (5-size));
             yPos = 200 + (30 * (size));
             width = 30 * size;
+
+            // set color based on what the size is:
             switch(size){
                 case 1:
                     color = diskColor1;
@@ -78,8 +77,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 case 6:
                     color = diskColor6;
                     break;
-                default:
-                    color = Color.BLACK;
             }
         }
 
@@ -91,16 +88,14 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     }
     //=============================================================================== GRAPHICS METHODS
 
-
+    // method called in the GUI class, which adds the disks to this panel
     public void addRect(int size) {
         DiskRect diskRect = new DiskRect(size);
         diskRectList[0].add(diskRect);
     }
 
-
+    // paint method called by the panel (never called by me)
     public void paint(Graphics g) {
-        //super.paint(g);
-
         // use double buffering
         Image bufferedImage = createImage(getWidth(), getHeight());
         Graphics2D buffer = (Graphics2D) bufferedImage.getGraphics();
@@ -120,39 +115,9 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         g.drawImage(bufferedImage, 0, 0, this);
     }
 
-
-    //----------------------------------------------- GAME moveDisk function
-
-    public void moveDisk(int orig, int dest){
-
-        if(!towers[orig].isEmpty()){
-            if(towers[dest].isEmpty()){
-                // both are empty
-                towers[dest].add(towers[orig].removeLast());
-                moveDiskRect(orig, dest);
-                repaint();
-                System.out.println("success - both are empty");
-            }
-            if(towers[orig].peekLast().size < towers[dest].peekLast().size){
-                System.out.println("Orig.size = " + towers[orig].peekLast().size);
-                towers[dest].add(towers[orig].removeLast());
-                moveDiskRect(orig, dest);
-                repaint();
-                System.out.println("Moved from " + orig + " to " + dest);
-            }
-
-            else{
-                colorDiskBack();
-                repaint();
-                storedTowerID = -1;
-                System.out.println("invalid move.");
-            }
-        }
-
-    } // end moveDisk
-
-
+    // move function for the diskRect (only graphically, no checking if it is a legal move (see move())
     public void moveDiskRect(int orig, int dest){
+
         diskRectList[orig].getLast().xPos += 200 * (dest - orig);
         diskRectList[orig].getLast().yPos += 30 * ((diskRectList[orig].size()-1) - diskRectList[dest].size());
         diskRectList[dest].add(diskRectList[orig].removeLast());
@@ -180,17 +145,22 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     }
 
+    // changes the color of the block currently selected.
     public void colorDiskSelected(int orig){
+        // make sure that both Linked lists (logical and graphical) aren't empty
         if(!towers[orig].isEmpty() && !diskRectList[orig].isEmpty()){
             diskRectList[orig].getLast().color = selected;
         }
         else{
-            System.out.println("empty in color disk selected");
+            System.out.println("Error: tried to select empty tower. (inside colorDiskSelected)");
         }
     }
 
+    // change the color of the disk back to its original color after it's moved.
     public void colorDiskBack(){
         for(int i = 0; i < 3; ++i){
+
+            // make sure that both Linked lists (logical and graphical) aren't empty
             if(!towers[i].isEmpty() && !diskRectList[i].isEmpty()){
                 switch(diskRectList[i].peekLast().size){
                     case 1:
@@ -216,10 +186,63 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
     }
 
+    //------------------------------------------------------------------------ GAME moveDisk function
+
+    // move function for the disk --> All logical checks are here
+    public void moveDisk(int orig, int dest){
+        // if the first tower isn't empty
+        if(!towers[orig].isEmpty()){
+
+            // if the destination is empty, just do the move
+            if(towers[dest].isEmpty()){
+                towers[dest].add(towers[orig].removeLast());
+                moveDiskRect(orig, dest);
+                repaint();
+                checkWin();
+            }
+
+            // if the first disk is smaller than the second disk
+            else if(towers[orig].peekLast().size < towers[dest].peekLast().size){
+                towers[dest].add(towers[orig].removeLast());
+                moveDiskRect(orig, dest);
+                repaint();
+                checkWin();
+            }
+
+            // this is an invalid move for some reason or another
+            else{
+                colorDiskBack();
+                repaint();
+                storedTowerID = -1;
+            }
+        }
+
+    } // end moveDisk
+
+    //------------------------------------------------------------------------ GAME checkWin function
+
+    // check for win
+    public void checkWin(){
+        if(!towers[2].isEmpty()){
+            if(towers[2].size() == numberOfDisks){
+                JOptionPane.showMessageDialog(null, "You won!", "Winner!", JOptionPane.PLAIN_MESSAGE);
+            }
+        }
+    }
+
     //========================================================================== GAME CONSTRUCTOR
 
     public Game(int numberOfDisks){
+
+        // Local variables
+        Color easyColor = new Color(120,120,120);
+        Color medColor = new Color(100,100,100);
+        Color hardColor = new Color(75,75,75);
+
+        final Dimension buttonDim = new Dimension(180, 40);
+
         addKeyListener(this);
+
         this.numberOfDisks = numberOfDisks;
         this.storedTowerID = -1;
 
@@ -228,10 +251,10 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             towers[i] = new LinkedList<Disk>();
         }
 
-        for(int i=0; i < 5; ++i){
-            towers[0].add(new Disk((5-i)));
-            towers[1].add(new Disk(6));
-            towers[2].add(new Disk(6));
+        for(int i=0; i < numberOfDisks; ++i){
+            towers[0].add(new Disk((numberOfDisks-i)));
+            // towers[1].add(new Disk(6));
+            // towers[2].add(new Disk(6));
         }
 
 
@@ -253,11 +276,14 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
         this.setOpaque(true);
 
+        /*  // Not used in this version, but left for future
         status = new JLabel("");
         status.setHorizontalAlignment(SwingConstants.CENTER);
         status.setSize(labelDim);
         status.setLocation(300,500);
+        */
 
+        // Buttons also function as labels
         tower1B = new JButton("1");
         tower1B.addActionListener(this);
         tower1B.setSize(buttonDim);
@@ -276,7 +302,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         this.add(tower1B);
         this.add(tower2B);
         this.add(tower3B);
-        this.add(status);
+        // this.add(status);
 
         this.setSize(800,600);
         this.setFocusable(true);
@@ -288,6 +314,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        /*
         switch(storedTowerID){
             case -1:
                 if(e.getSource() == tower1B){
@@ -341,6 +368,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 }
             break;
         }
+        */
     }
 
 
@@ -348,6 +376,17 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
+
+    }
+
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
         switch(storedTowerID){
             case -1:
@@ -367,7 +406,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         repaint();
                         storedTowerID = 2;
                         break;
-                    }
+                }
                 break;
             case 0:
                 switch(e.getKeyChar()){
@@ -408,16 +447,5 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 }
                 break;
         }
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
     }
 }

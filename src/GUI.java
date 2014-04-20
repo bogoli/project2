@@ -15,20 +15,20 @@ public class GUI extends JFrame implements ActionListener{
     private JMenuBar menuBar;
     private JMenu newGame, options, about;
     private JMenuItem four, five, six, rules, quit, towers, dev;
-    private JLabel introLabel, testLabel;
-    private JPanel introP, menuP, testP;
+
+    private JLabel introLabel, directionsLabel;
+    private JPanel introP, menuP;
     private JButton start;
     private Color startColor = new Color(46,224,174);
     private Color introColor = new Color(255,255,255);
     private Color dialogColor = new Color(161,220,64);
 
-
     private final Dimension dimension = new Dimension(800,600);
     private static final String TITLE = "Towers of Hanoi";
     Container mainPane = this.getContentPane();
 
-    Font menuFont = new Font("American Typewriter", Font.PLAIN, 14);
-    Font mainFont = new Font("American Typewriter", Font.PLAIN, 24);
+    Font menuFont = new Font("Arial", Font.PLAIN, 14);
+    Font mainFont = new Font("Arial", Font.PLAIN, 24);
 
     public GUI(){
         // set UI component fonts
@@ -48,7 +48,6 @@ public class GUI extends JFrame implements ActionListener{
         UIManager.put("MenuItem.background", startColor);
         UIManager.put("OptionPane.background", dialogColor);
         UIManager.put("Panel.background", dialogColor);
-
 
 
         mainPane.setLayout(new BorderLayout());
@@ -102,8 +101,14 @@ public class GUI extends JFrame implements ActionListener{
 
         introLabel = new JLabel("Tower of Hanoi");
         introLabel.setSize(500,200);
-        introLabel.setLocation(150,100);
+        introLabel.setLocation(150,80);
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        directionsLabel = new JLabel("Use the number keys corresponding to the towers to pick up and deposit disks.");
+        directionsLabel.setSize(600,200);
+        directionsLabel.setLocation(100,110);
+        directionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        directionsLabel.setFont(menuFont);
 
         start = new JButton("START");
         start.setBackground(startColor);
@@ -117,6 +122,7 @@ public class GUI extends JFrame implements ActionListener{
         introP.setBackground(introColor);
         introP.setOpaque(true);
         introP.add(introLabel);
+        introP.add(directionsLabel);
         introP.add(start);
 
         // Add everything to contentPane
@@ -139,11 +145,14 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+
+            // Call method from game class
             game.addRect(4);
             game.addRect(3);
             game.addRect(2);
             game.addRect(1);
             game.requestFocus();
+
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
@@ -155,12 +164,15 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+
+            // Call method from game class
             game.addRect(5);
             game.addRect(4);
             game.addRect(3);
             game.addRect(2);
             game.addRect(1);
             game.requestFocus();
+
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
@@ -172,6 +184,8 @@ public class GUI extends JFrame implements ActionListener{
             mainPane.removeAll();
             mainPane.add(menuP, BorderLayout.NORTH);
             mainPane.add(game);
+
+            // Call method from game class
             game.addRect(6);
             game.addRect(5);
             game.addRect(4);
@@ -179,6 +193,7 @@ public class GUI extends JFrame implements ActionListener{
             game.addRect(2);
             game.addRect(1);
             game.requestFocus();
+
             mainPane.setVisible(true);
             mainPane.revalidate();
             mainPane.repaint();
