@@ -30,10 +30,10 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     private Color selected = new Color(250, 50, 70);
 
     public int numberOfDisks;
-    public LinkedList<Disk>[] towers = new LinkedList[3];
     public int storedTowerID;
 
     public LinkedList<DiskRect>[] diskRectList = new LinkedList[3];
+    public LinkedList<Disk>[] towers = new LinkedList[3];
 
     private final Dimension labelDim = new Dimension(200,30);
     private final Dimension buttonDim = new Dimension(180,40);
@@ -124,24 +124,40 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     //----------------------------------------------- GAME moveDisk function
 
     public void moveDisk(int orig, int dest){
-        if(diskRectList[orig].size() != 0 && (diskRectList[orig].peekLast().size < diskRectList[dest].peekLast().size)){
+        try{
+        if(towers[dest].isEmpty()){
+            if(towers[orig].peekLast().size < towers[dest].peekLast().size){
+                System.out.println("Orig.size = " + towers[orig].peekLast().size);
+                towers[dest].add(towers[orig].removeLast());
+                moveDiskRect(orig, dest);
+                repaint();
+                System.out.println("Moved from " + orig + " to " + dest);
 
-            diskRectList[dest].add(diskRectList[orig].removeLast());
-
+            }
+            else{
+                System.out.println("invalid move.");
+            }
+        }
+        if(!towers[dest].isEmpty()){
+            towers[dest].add(towers[orig].removeLast());
             moveDiskRect(orig, dest);
             repaint();
             System.out.println("Moved from " + orig + " to " + dest);
+        }
+        }catch(NullPointerException e){
+            System.out.println("towers.orig empty?");
 
         }
+    } // end moveDisk
 
-    }
+
 
     public void moveDiskRect(int orig, int dest){
         diskRectList[orig].getLast().xPos += 200 * (dest - orig);
         diskRectList[orig].getLast().yPos += 30 * ((diskRectList[orig].size()-1) - diskRectList[dest].size());
         diskRectList[dest].add(diskRectList[orig].removeLast());
 
-        switch(diskRectList[orig].peekLast().size){
+        switch(diskRectList[dest].peekLast().size){
             case 1:
                 diskRectList[dest].getLast().color = diskColor1;
                 break;
@@ -175,8 +191,8 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         this.numberOfDisks = numberOfDisks;
         this.storedTowerID = -1;
 
-        /*
-        for (int i=0; i<3; ++i){
+        for (int i = 0; i < 3; ++i){
+            diskRectList[i] = new LinkedList<DiskRect>();
             towers[i] = new LinkedList<Disk>();
         }
 
@@ -185,11 +201,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             towers[1].add(new Disk(6));
             towers[2].add(new Disk(6));
         }
-        */
 
-        for (int i=0; i<3; ++i){
-            diskRectList[i] = new LinkedList<DiskRect>();
-        }
 
         // -------------------------------------------- gamePane - adding components
         this.setLayout(null);
@@ -259,17 +271,17 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 try{
                 switch(e.getKeyChar()){
                     case '1':
-                        colorDiskRect(0);
+                        //colorDiskRect(0);
                         repaint();
                         storedTowerID = 0;
                         break;
                     case '2':
-                        colorDiskRect(1);
+                        //colorDiskRect(1);
                         repaint();
                         storedTowerID = 1;
                         break;
                     case '3':
-                        colorDiskRect(2);
+                        //colorDiskRect(2);
                         repaint();
                         storedTowerID = 2;
                         break;
@@ -281,7 +293,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 }
                 break;
             case 0:
-                try{
                 switch(e.getKeyChar()){
                     case '1':
                         status.setText("1 - 1");
@@ -296,13 +307,8 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         storedTowerID = -1;
                         break;
                 }
-                }catch(NullPointerException nullPoint){
-                    System.out.println("Null Pointer in move case 0");
-                    System.out.println(nullPoint.getMessage());
-                }
                 break;
             case 1:
-                try{
                 switch(e.getKeyChar()){
                     case '1':
                         moveDisk(1,0);
@@ -317,13 +323,9 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         storedTowerID = -1;
                         break;
                 }
-                }catch(NullPointerException nullPoint){
-                    System.out.println("Null Pointer in move case 1");
-                    System.out.println(nullPoint.getMessage());
-                }
                 break;
             case 2:
-                try{
+
                 switch(e.getKeyChar()){
                     case '1':
                         moveDisk(2,0);
@@ -337,10 +339,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         status.setText("3-3 invalid");
                         storedTowerID = -1;
                         break;
-                }
-                }catch(NullPointerException nullPoint){
-                    System.out.println("Null Pointer in move case 2");
-                    System.out.println(nullPoint.getMessage());
                 }
                 break;
         }
