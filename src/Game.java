@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 public class Game extends JPanel implements ActionListener, KeyListener{
 
     private JLabel status;
-    private JButton rod1Button, rod2Button, rod3Button;
+    private static JButton tower1B, tower2B, tower3B;
     private Color easyColor = new Color(120,120,120);
     private Color medColor = new Color(100,100,100);
     private Color hardColor = new Color(75,75,75);
@@ -124,32 +124,32 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     //----------------------------------------------- GAME moveDisk function
 
     public void moveDisk(int orig, int dest){
-        try{
-        if(towers[dest].isEmpty()){
+
+        if(!towers[orig].isEmpty()){
+            if(towers[dest].isEmpty()){
+                // both are empty
+                towers[dest].add(towers[orig].removeLast());
+                moveDiskRect(orig, dest);
+                repaint();
+                System.out.println("success - both are empty");
+            }
             if(towers[orig].peekLast().size < towers[dest].peekLast().size){
                 System.out.println("Orig.size = " + towers[orig].peekLast().size);
                 towers[dest].add(towers[orig].removeLast());
                 moveDiskRect(orig, dest);
                 repaint();
                 System.out.println("Moved from " + orig + " to " + dest);
-
             }
+
             else{
+                colorDiskBack();
+                repaint();
+                storedTowerID = -1;
                 System.out.println("invalid move.");
             }
         }
-        if(!towers[dest].isEmpty()){
-            towers[dest].add(towers[orig].removeLast());
-            moveDiskRect(orig, dest);
-            repaint();
-            System.out.println("Moved from " + orig + " to " + dest);
-        }
-        }catch(NullPointerException e){
-            System.out.println("towers.orig empty?");
 
-        }
     } // end moveDisk
-
 
 
     public void moveDiskRect(int orig, int dest){
@@ -180,8 +180,40 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     }
 
-    public void colorDiskRect(int orig){
-        diskRectList[orig].getLast().color = selected;
+    public void colorDiskSelected(int orig){
+        if(!towers[orig].isEmpty() && !diskRectList[orig].isEmpty()){
+            diskRectList[orig].getLast().color = selected;
+        }
+        else{
+            System.out.println("empty in color disk selected");
+        }
+    }
+
+    public void colorDiskBack(){
+        for(int i = 0; i < 3; ++i){
+            if(!towers[i].isEmpty() && !diskRectList[i].isEmpty()){
+                switch(diskRectList[i].peekLast().size){
+                    case 1:
+                        diskRectList[i].getLast().color = diskColor1;
+                        break;
+                    case 2:
+                        diskRectList[i].getLast().color = diskColor2;
+                        break;
+                    case 3:
+                        diskRectList[i].getLast().color = diskColor3;
+                        break;
+                    case 4:
+                        diskRectList[i].getLast().color = diskColor4;
+                        break;
+                    case 5:
+                        diskRectList[i].getLast().color = diskColor5;
+                        break;
+                    case 6:
+                        diskRectList[i].getLast().color = diskColor6;
+                        break;
+                }// end switch
+            }
+        }
     }
 
     //========================================================================== GAME CONSTRUCTOR
@@ -197,7 +229,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         }
 
         for(int i=0; i < 5; ++i){
-            towers[0].add(new Disk((i)));
+            towers[0].add(new Disk((5-i)));
             towers[1].add(new Disk(6));
             towers[2].add(new Disk(6));
         }
@@ -226,24 +258,24 @@ public class Game extends JPanel implements ActionListener, KeyListener{
         status.setSize(labelDim);
         status.setLocation(300,500);
 
-        rod1Button = new JButton("1");
-        rod1Button.addActionListener(this);
-        rod1Button.setSize(buttonDim);
-        rod1Button.setLocation(110,450);
+        tower1B = new JButton("1");
+        tower1B.addActionListener(this);
+        tower1B.setSize(buttonDim);
+        tower1B.setLocation(110,450);
 
-        rod2Button = new JButton("2");
-        rod2Button.addActionListener(this);
-        rod2Button.setSize(buttonDim);
-        rod2Button.setLocation(310,450);
+        tower2B = new JButton("2");
+        tower2B.addActionListener(this);
+        tower2B.setSize(buttonDim);
+        tower2B.setLocation(310,450);
 
-        rod3Button = new JButton("3");
-        rod3Button.addActionListener(this);
-        rod3Button.setSize(buttonDim);
-        rod3Button.setLocation(510,450);
+        tower3B = new JButton("3");
+        tower3B.addActionListener(this);
+        tower3B.setSize(buttonDim);
+        tower3B.setLocation(510,450);
 
-        this.add(rod1Button);
-        this.add(rod2Button);
-        this.add(rod3Button);
+        this.add(tower1B);
+        this.add(tower2B);
+        this.add(tower3B);
         this.add(status);
 
         this.setSize(800,600);
@@ -256,7 +288,59 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        switch(storedTowerID){
+            case -1:
+                if(e.getSource() == tower1B){
+                    colorDiskSelected(0);
+                    repaint();
+                    storedTowerID = 0;
+                }
+                else if(e.getSource() == tower2B){
+                    colorDiskSelected(1);
+                    repaint();
+                    storedTowerID = 1;
+                }
+                else if(e.getSource() == tower3B){
+                    colorDiskSelected(2);
+                    repaint();
+                    storedTowerID = 2;
+                }
+                break;
 
+            case 0:
+                if(e.getSource() == tower2B){
+                    moveDisk(0, 1);
+                    storedTowerID = -1;
+                }
+                else if(e.getSource() == tower3B){
+                    moveDisk(0, 2);
+                    storedTowerID = -1;
+                }
+                break;
+
+            case 1:
+                if(e.getSource() == tower1B){
+                    moveDisk(1,0);
+                    storedTowerID = -1;
+                }
+                if(e.getSource() == tower3B){
+                    moveDisk(1,2);
+                    storedTowerID = -1;
+                }
+                break;
+
+            case 2:
+                if(e.getSource() == tower1B){
+                    moveDisk(2,0);
+                    storedTowerID = -1;
+                }
+
+                if(e.getSource() == tower2B){
+                    moveDisk(2,1);
+                    storedTowerID = -1;
+                }
+            break;
+        }
     }
 
 
@@ -267,37 +351,26 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         switch(storedTowerID){
             case -1:
-                // no tower selected
-                try{
                 switch(e.getKeyChar()){
                     case '1':
-                        //colorDiskRect(0);
+                        colorDiskSelected(0);
                         repaint();
                         storedTowerID = 0;
                         break;
                     case '2':
-                        //colorDiskRect(1);
+                        colorDiskSelected(1);
                         repaint();
                         storedTowerID = 1;
                         break;
                     case '3':
-                        //colorDiskRect(2);
+                        colorDiskSelected(2);
                         repaint();
                         storedTowerID = 2;
                         break;
                     }
-                }catch(NoSuchElementException noSuch){
-                    System.out.println("No Such Element Exception in colorDiskRect switch");
-                    System.out.println(noSuch.getMessage());
-                    storedTowerID = -1;
-                }
                 break;
             case 0:
                 switch(e.getKeyChar()){
-                    case '1':
-                        status.setText("1 - 1");
-                        storedTowerID = -1;
-                        break;
                     case '2':
                         moveDisk(0, 1);
                         storedTowerID = -1;
@@ -314,10 +387,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         moveDisk(1,0);
                         storedTowerID = -1;
                         break;
-                    case '2':
-                        status.setText("2-2 invalid");
-                        storedTowerID = -1;
-                        break;
+
                     case '3':
                         moveDisk(1,2);
                         storedTowerID = -1;
@@ -333,10 +403,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                         break;
                     case '2':
                         moveDisk(2,1);
-                        storedTowerID = -1;
-                        break;
-                    case '3':
-                        status.setText("3-3 invalid");
                         storedTowerID = -1;
                         break;
                 }
