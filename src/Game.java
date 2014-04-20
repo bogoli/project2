@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.KeyListener;
 import java.util.LinkedList;
 
 
@@ -12,10 +12,10 @@ import java.util.LinkedList;
  * 4/13/14
  * CS 2410
  */
-public class Game extends JPanel implements ActionListener, KeyListener{
+public class Game extends JPanel implements ActionListener{
 
     private static JButton tower1B, tower2B, tower3B;
-    private JLabel status;
+    // private JLabel status;
 
     // colors corresponding to disks
     private Color diskColor6  = new Color(100,200,50);
@@ -213,7 +213,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
             else{
                 colorDiskBack();
                 repaint();
-                storedTowerID = -1;
             }
         }
 
@@ -241,7 +240,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         final Dimension buttonDim = new Dimension(180, 40);
 
-        addKeyListener(this);
+        // addKeyListener(this);
 
         this.numberOfDisks = numberOfDisks;
         this.storedTowerID = -1;
@@ -253,8 +252,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
         for(int i=0; i < numberOfDisks; ++i){
             towers[0].add(new Disk((numberOfDisks-i)));
-            // towers[1].add(new Disk(6));
-            // towers[2].add(new Disk(6));
         }
 
 
@@ -314,7 +311,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        /*
+
         switch(storedTowerID){
             case -1:
                 if(e.getSource() == tower1B){
@@ -368,12 +365,12 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 }
             break;
         }
-        */
+
     }
 
 
     //=============================================================================== KeyListener
-
+/*
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -388,6 +385,7 @@ public class Game extends JPanel implements ActionListener, KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
 
+        this.requestFocus();
         switch(storedTowerID){
             case -1:
                 switch(e.getKeyChar()){
@@ -448,4 +446,6 @@ public class Game extends JPanel implements ActionListener, KeyListener{
                 break;
         }
     }
+*/
 }
+

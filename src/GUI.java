@@ -27,8 +27,8 @@ public class GUI extends JFrame implements ActionListener{
     private static final String TITLE = "Towers of Hanoi";
     Container mainPane = this.getContentPane();
 
-    Font menuFont = new Font("Arial", Font.PLAIN, 14);
-    Font mainFont = new Font("Arial", Font.PLAIN, 24);
+    Font menuFont = new Font("Avenir Next", Font.PLAIN, 14);
+    Font mainFont = new Font("Avenir Next", Font.PLAIN, 24);
 
     public GUI(){
         // set UI component fonts
@@ -104,7 +104,7 @@ public class GUI extends JFrame implements ActionListener{
         introLabel.setLocation(150,80);
         introLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        directionsLabel = new JLabel("Use the number keys corresponding to the towers to pick up and deposit disks.");
+        directionsLabel = new JLabel("Click the buttons corresponding to the towers to pick up and deposit disks.");
         directionsLabel.setSize(600,200);
         directionsLabel.setLocation(100,110);
         directionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
