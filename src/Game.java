@@ -332,6 +332,11 @@ public class Game extends JPanel implements ActionListener{
                 break;
 
             case 0:
+                if(e.getSource() == tower1B){
+                    colorDiskBack();
+                    repaint();
+                    storedTowerID = -1;
+                }
                 if(e.getSource() == tower2B){
                     moveDisk(0, 1);
                     storedTowerID = -1;
@@ -345,6 +350,11 @@ public class Game extends JPanel implements ActionListener{
             case 1:
                 if(e.getSource() == tower1B){
                     moveDisk(1,0);
+                    storedTowerID = -1;
+                }
+                if(e.getSource() == tower2B){
+                    colorDiskBack();
+                    repaint();
                     storedTowerID = -1;
                 }
                 if(e.getSource() == tower3B){
@@ -361,6 +371,11 @@ public class Game extends JPanel implements ActionListener{
 
                 if(e.getSource() == tower2B){
                     moveDisk(2,1);
+                    storedTowerID = -1;
+                }
+                if(e.getSource() == tower3B){
+                    colorDiskBack();
+                    repaint();
                     storedTowerID = -1;
                 }
             break;
